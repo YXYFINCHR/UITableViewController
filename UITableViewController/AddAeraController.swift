@@ -7,12 +7,44 @@
 //
 
 import UIKit
+import CoreData
 
 class AddAeraController: UITableViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     // 为从用户相册返回选取的照片，需遵从UIImagePickerControllerDelegate和UINavigationControllerDelegate协议
     // 因为模态弹出的选取照片的view带有控制器，所以需实现UINavigationControllerDelegate(以实现dismiss?)。
-    @IBOutlet weak var coverImageView: UIImageView!
+    var area: AreaMO!
+    var isVisited = false
     
+    @IBOutlet weak var coverImageView: UIImageView!
+    @IBOutlet weak var tfName: UITextField!
+    @IBOutlet weak var tfProvince: UITextField!
+    @IBOutlet weak var tfPart: UITextField!
+    @IBOutlet weak var labelVisited: UILabel!
+    
+    @IBAction func isVisited(_ sender: UIButton) {
+        if sender.tag == 8001 {
+            isVisited = true
+            labelVisited.text = "我来过"
+        } else if sender.tag == 8002 {
+            isVisited = false
+            labelVisited.text = "没来过"
+        }
+    }
+    @IBAction func saveTap(_ sender: UIBarButtonItem) {
+        let appDelegate = UIApplication.shared.delegate as! AppDelegate
+        area = AreaMO(context: appDelegate.persistentContainer.viewContext)
+        area.name = tfName.text
+        area.part = tfPart.text
+        area.province = tfProvince.text
+        area.isVisited = isVisited
+        if let imageData = UIImageJPEGRepresentation(coverImageView.image!, 0.7) {
+            area.image = NSData(data: imageData) as Data
+        }
+        print("正在保存……")
+        appDelegate.saveContext()
+        
+        performSegue(withIdentifier: "unwindToHomeList", sender: self)
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()

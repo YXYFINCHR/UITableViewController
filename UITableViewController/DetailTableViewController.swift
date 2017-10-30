@@ -11,14 +11,14 @@ import UIKit
 class DetailTableViewController: UITableViewController {
     @IBOutlet weak var LargeImageView: UIImageView!
     @IBOutlet weak var ratingBtn: UIButton!
-    var area: Area!
+    var area: AreaMO!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         //防止报一个小错
         //self.tableView.rowHeight = 44
         
-        LargeImageView.image = UIImage(named: area.image)
+        LargeImageView.image = UIImage(data: area.image!)
         tableView.backgroundColor = UIColor(white: 0.98, alpha: 1)
         tableView.separatorColor = UIColor(white: 0.9, alpha: 1)
         //删除多余空行

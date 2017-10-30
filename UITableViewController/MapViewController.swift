@@ -10,7 +10,7 @@ import UIKit
 import MapKit
 
 class MapViewController: UIViewController, MKMapViewDelegate {
-    var area:Area!
+    var area: AreaMO!
     
     @IBOutlet weak var mapView: MKMapView!
     
@@ -23,7 +23,7 @@ class MapViewController: UIViewController, MKMapViewDelegate {
         mapView.showsBuildings = true
 
         let coder = CLGeocoder()
-        coder.geocodeAddressString(area.name) { (ps, error) in
+        coder.geocodeAddressString(area.name!) { (ps, error) in
             guard let pos = ps else{
                 print(error ?? "位置处错误")
                 return
@@ -39,9 +39,7 @@ class MapViewController: UIViewController, MKMapViewDelegate {
                 self.mapView.showAnnotations([annotation], animated: true)
                 self.mapView.selectAnnotation(annotation, animated: true)
             }
-            
         }
-        
     }
     
     // 自定义Annotation View
@@ -60,7 +58,7 @@ class MapViewController: UIViewController, MKMapViewDelegate {
         }
         
         let leftIconView = UIImageView(frame: CGRect(x: 0, y: 0, width: 53, height: 53))
-        leftIconView.image = UIImage(named: area.image)
+        leftIconView.image = UIImage(data: area.image!)
         annotationView?.leftCalloutAccessoryView = leftIconView
         
         //annotationView?.pinTintColor = .green
