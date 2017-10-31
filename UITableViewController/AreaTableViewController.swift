@@ -7,8 +7,9 @@
 //
 
 import UIKit
+import CoreData
 
-class AreaTableViewController: UITableViewController {
+class AreaTableViewController: UITableViewController, NSFetchedResultsControllerDelegate {
 
     /*
     var areas = ["闵行区莘庄镇","兰州七里河区","三明市尤溪县","西宁城西区","广州白云区","闽侯县上街镇","哈尔滨市南岗区","临汾市尧渡区","成都武侯区","汕头市金平区","长沙市芙蓉区"]
@@ -19,8 +20,11 @@ class AreaTableViewController: UITableViewController {
     //重用cell时同步更新选中(打钩)状态，避免出现未选项被打钩
     //上述代码等价于var visited = [false,false,...,false]11个false
     */
+    // MARK: - 定义变量
     var areas: [AreaMO] = []
+    var fc: NSFetchedResultsController<AreaMO>!
     
+    // MARK: - 自带方法
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -35,14 +39,58 @@ class AreaTableViewController: UITableViewController {
         //详解：若在页面1中点击某项进入了页面2，希望在页面2的左上角只显示一个返回箭头，这个操作要在页面1中进行设置。
         tableView.estimatedRowHeight = 100
         tableView.rowHeight = UITableViewAutomaticDimension
+        
+        fetchAllData2()
     }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+//        fetchAllData()
+//        tableView.reloadData()
+    }
+    
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
+    
+    // MARK: - 自定义函数
+//    func fetchAllData() {
+//        let appDelegate = UIApplication.shared.delegate as! AppDelegate
+//        do {
+//            areas = try appDelegate.persistentContainer.viewContext.fetch(AreaMO.fetchRequest())
+//        } catch  {
+//            print(error)
+//        }
+//    }
+    
+    func fetchAllData2() {
+        let request: NSFetchRequest<AreaMO> = AreaMO.fetchRequest()
+        let sortDescriptor = NSSortDescriptor(key: "name", ascending: true)
+        request.sortDescriptors = [sortDescriptor]
+        
+        let appDelegate = UIApplication.shared.delegate as! AppDelegate
+        let context = appDelegate.persistentContainer.viewContext
+        fc = NSFetchedResultsController(
+            fetchRequest: request,
+            managedObjectContext: context,
+            sectionNameKeyPath: nil,
+            cacheName: nil
+        )
+        fc.delegate = self
+        
+        do {
+            try fc.performFetch()
+            if let obj = fc.fetchedObjects {
+                areas = obj
+            }
+        } catch  {
+            print(error)
+        }
+    }
 
-    // MARK: - Table view delegate
+    //// MARK: - Table view delegate
     /*override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
 //        print("您点击了第",indexPath.section,"组，第",indexPath.row,"行")
         let menu = UIAlertController(title: "交互菜单", message: "你点击了第\(indexPath.row)行", preferredStyle: .actionSheet)
@@ -81,7 +129,7 @@ class AreaTableViewController: UITableViewController {
         tableView.deselectRow(at: indexPath, animated: true)
     }
     */
-    
+    // MARK: - 实现系统提供的功能函数
     override func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
         
         let actionShare = UITableViewRowAction(style: .normal, title: "分享") { (_, indexPath) in
@@ -106,9 +154,14 @@ class AreaTableViewController: UITableViewController {
             self.parts.remove(at: indexPath.row)
             self.visited.remove(at: indexPath.row)
             */
-            self.areas.remove(at: indexPath.row)
+            // self.areas.remove(at: indexPath.row)
+            let appDelegate = UIApplication.shared.delegate as! AppDelegate
+            let context = appDelegate.persistentContainer.viewContext
             
-            tableView.deleteRows(at: [indexPath], with: .fade)
+            context.delete(self.fc.object(at: indexPath))
+            appDelegate.saveContext()
+            
+            // tableView.deleteRows(at: [indexPath], with: .fade)
         }
         
         let actionTop = UITableViewRowAction(style: .normal, title: "置顶") { (_, _) in
@@ -120,8 +173,30 @@ class AreaTableViewController: UITableViewController {
         return [actionDel, actionShare, actionTop]
     }
     
+    func controllerWillChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
+        tableView.beginUpdates()
+    }
+    func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
+        tableView.endUpdates()
+    }
+    func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
+        switch type {
+        case .delete:
+            tableView.deleteRows(at: [indexPath!], with: .automatic)
+        case .insert:
+            tableView.insertRows(at: [newIndexPath!], with: .automatic)
+        case .update:
+            tableView.reloadRows(at: [indexPath!], with: .automatic)
+        default:
+            tableView.reloadData()
+        }
+        if let obj = controller.fetchedObjects {
+            areas = obj as! [AreaMO]
+        }
+    }
     
-    // MARK: - Table view data source
+    
+    //// MARK: - Table view data source
 
     /*
     override func numberOfSections(in tableView: UITableView) -> Int {
