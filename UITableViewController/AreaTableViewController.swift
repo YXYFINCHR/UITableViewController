@@ -9,7 +9,7 @@
 import UIKit
 import CoreData
 
-class AreaTableViewController: UITableViewController, NSFetchedResultsControllerDelegate {
+class AreaTableViewController: UITableViewController, NSFetchedResultsControllerDelegate, UISearchResultsUpdating {
 
     /*
     var areas = ["闵行区莘庄镇","兰州七里河区","三明市尤溪县","西宁城西区","广州白云区","闽侯县上街镇","哈尔滨市南岗区","临汾市尧渡区","成都武侯区","汕头市金平区","长沙市芙蓉区"]
@@ -23,6 +23,10 @@ class AreaTableViewController: UITableViewController, NSFetchedResultsController
     // MARK: - 定义变量
     var areas: [AreaMO] = []
     var fc: NSFetchedResultsController<AreaMO>!
+    var searchController: UISearchController!
+    var searchResult: [AreaMO] = []
+    
+    
     
     // MARK: - 自带方法
     override func viewDidLoad() {
@@ -39,6 +43,16 @@ class AreaTableViewController: UITableViewController, NSFetchedResultsController
         //详解：若在页面1中点击某项进入了页面2，希望在页面2的左上角只显示一个返回箭头，这个操作要在页面1中进行设置。
         tableView.estimatedRowHeight = 100
         tableView.rowHeight = UITableViewAutomaticDimension
+        
+        searchController = UISearchController(searchResultsController: nil)
+        searchController.searchResultsUpdater = self
+        tableView.tableHeaderView = searchController.searchBar
+        searchController.dimsBackgroundDuringPresentation = false   // 搜索时展示结果的单元格不变暗，可直接点击结果跳转
+        // 定制搜索条外观
+        // searchController.searchBar.tintColor = UIColor.white    // 前景色
+        // searchController.searchBar.barTintColor = UIColor.cyan    // 背景色
+        searchController.searchBar.placeholder = "输入地名以进行搜索"
+        searchController.searchBar.searchBarStyle = .minimal        // 使用透明样式
         
         fetchAllData2()
     }
@@ -89,6 +103,12 @@ class AreaTableViewController: UITableViewController, NSFetchedResultsController
             print(error)
         }
     }
+    
+    func searchFilter(text: String) {
+        searchResult = areas.filter({ (area) -> Bool in
+            return (area.name!.localizedCaseInsensitiveContains(text))
+        })
+    }
 
     //// MARK: - Table view delegate
     /*override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -129,7 +149,7 @@ class AreaTableViewController: UITableViewController, NSFetchedResultsController
         tableView.deselectRow(at: indexPath, animated: true)
     }
     */
-    // MARK: - 实现系统提供的功能函数
+    // MARK: - 实现系统提供的功能函数(协议中的函数)
     override func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
         
         let actionShare = UITableViewRowAction(style: .normal, title: "分享") { (_, indexPath) in
@@ -195,8 +215,17 @@ class AreaTableViewController: UITableViewController, NSFetchedResultsController
         }
     }
     
+    func updateSearchResults(for searchController: UISearchController) {
+        if var text = searchController.searchBar.text {
+            text = text.trimmingCharacters(in: .whitespaces)   // 去掉输入的空格(仅前后)
+            searchFilter(text: text)
+            tableView.reloadData()
+        }
+        
+    }
     
-    //// MARK: - Table view data source
+    
+    // MARK: - Table view data source
 
     /*
     override func numberOfSections(in tableView: UITableView) -> Int {
@@ -207,11 +236,12 @@ class AreaTableViewController: UITableViewController, NSFetchedResultsController
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
-        return areas.count
+        return searchController.isActive ? searchResult.count : areas.count
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as! CustomTableViewCell
+        let area = searchController.isActive ? searchResult[indexPath.row] : areas[indexPath.row]
 
         // Configure the cell...
         /*
@@ -220,33 +250,31 @@ class AreaTableViewController: UITableViewController, NSFetchedResultsController
         cell.provinceLabel.text = provinces[indexPath.row]
         cell.partLabel.text = parts[indexPath.row]
         */
-        cell.nameLabel.text = areas[indexPath.row].name
-        cell.thumbImageView.image = UIImage(data: areas[indexPath.row].image!)
-        cell.provinceLabel.text = areas[indexPath.row].province
-        cell.partLabel.text = areas[indexPath.row].part
+        cell.nameLabel.text = area.name
+        cell.thumbImageView.image = UIImage(data: area.image!)
+        cell.provinceLabel.text = area.province
+        cell.partLabel.text = area.part
         
         cell.thumbImageView.layer.cornerRadius = cell.thumbImageView.frame.size.height / 2
         cell.thumbImageView.clipsToBounds = true
         
         //重用cell时读取状态
-        if areas[indexPath.row].isVisited {
-            cell.accessoryType = .checkmark
-        }else{
-            cell.accessoryType = .none
-        }
-        
-        //上述if-else可简洁写为：cell.accessoryType = visited[indexPath.row] ? .checkmark : .none
+//        if areas[indexPath.row].isVisited {
+//            cell.accessoryType = .checkmark
+//        }else{
+//            cell.accessoryType = .none
+//        }
+        cell.accessoryType = area.isVisited ? .checkmark : .none
 
         return cell
     }
 
-    /*
     // Override to support conditional editing of the table view.
     override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
         // Return false if you do not want the specified item to be editable.
-        return true
+        // 在这里应用为：搜索时单元格不可编辑，即编辑状态与搜索栏激活状态相反
+        return !searchController.isActive
     }
-    */
 
     
     // Override to support editing the table view.
@@ -303,12 +331,11 @@ class AreaTableViewController: UITableViewController, NSFetchedResultsController
             dest.province = provinces[tableView.indexPathForSelectedRow!.row]
             dest.part = parts[tableView.indexPathForSelectedRow!.row]
             */
-            dest.area = areas[tableView.indexPathForSelectedRow!.row]
+            dest.area = searchController.isActive ? searchResult[tableView.indexPathForSelectedRow!.row] : areas[tableView.indexPathForSelectedRow!.row]
         }
         
     }
     @IBAction func close(segue: UIStoryboardSegue){
         
     }
-
 }
