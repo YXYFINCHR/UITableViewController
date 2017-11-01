@@ -20,6 +20,8 @@
 		9A94F4F21FA7041E004F0A72 /* UITableViewController.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 9A94F4F01FA7041E004F0A72 /* UITableViewController.xcdatamodeld */; };
 		9AA2CBED1FA02DFB00A156EC /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9AA2CBEC1FA02DFB00A156EC /* MapKit.framework */; };
 		9AA4ECD91F9C42CF00B8B99B /* Area.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AA4ECD81F9C42CF00B8B99B /* Area.swift */; };
+		9AA9EC011FA9DD1400B11207 /* ContentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AA9EC001FA9DD1400B11207 /* ContentViewController.swift */; };
+		9AA9EC031FA9DF7700B11207 /* GuideViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AA9EC021FA9DF7700B11207 /* GuideViewController.swift */; };
 		9AC580431F9C9A4C00C132B4 /* DetailTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AC580421F9C9A4C00C132B4 /* DetailTableViewCell.swift */; };
 /* End PBXBuildFile section */
 
@@ -39,6 +41,8 @@
 		9A94F4F11FA7041E004F0A72 /* UITableViewController.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = UITableViewController.xcdatamodel; sourceTree = "<group>"; };
 		9AA2CBEC1FA02DFB00A156EC /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
 		9AA4ECD81F9C42CF00B8B99B /* Area.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Area.swift; sourceTree = "<group>"; };
+		9AA9EC001FA9DD1400B11207 /* ContentViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentViewController.swift; sourceTree = "<group>"; };
+		9AA9EC021FA9DF7700B11207 /* GuideViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GuideViewController.swift; sourceTree = "<group>"; };
 		9AC580421F9C9A4C00C132B4 /* DetailTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailTableViewCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -77,8 +81,10 @@
 				9A16B6041F99CEB5008A8BCA /* AppDelegate.swift */,
 				9A16B6161F99CF91008A8BCA /* AreaTableViewController.swift */,
 				9A11CA4C1F9C53B20042D592 /* DetailTableViewController.swift */,
+				9AA9EC001FA9DD1400B11207 /* ContentViewController.swift */,
 				9A01917F1FA5E2260075B3A8 /* AddAeraController.swift */,
 				9A31AB2C1F9F395500B86C74 /* ReviewViewController.swift */,
+				9AA9EC021FA9DF7700B11207 /* GuideViewController.swift */,
 				9A01917B1FA5730D0075B3A8 /* MapViewController.swift */,
 				9A94F4F01FA7041E004F0A72 /* UITableViewController.xcdatamodeld */,
 				9AC580421F9C9A4C00C132B4 /* DetailTableViewCell.swift */,
@@ -182,9 +188,11 @@
 				9A0191801FA5E2260075B3A8 /* AddAeraController.swift in Sources */,
 				9A94F4F21FA7041E004F0A72 /* UITableViewController.xcdatamodeld in Sources */,
 				9A31AB2D1F9F395500B86C74 /* ReviewViewController.swift in Sources */,
+				9AA9EC031FA9DF7700B11207 /* GuideViewController.swift in Sources */,
 				9A11CA4D1F9C53B20042D592 /* DetailTableViewController.swift in Sources */,
 				9A16B6191F99DCE4008A8BCA /* CustomTableViewCell.swift in Sources */,
 				9A16B6171F99CF91008A8BCA /* AreaTableViewController.swift in Sources */,
+				9AA9EC011FA9DD1400B11207 /* ContentViewController.swift in Sources */,
 				9A16B6051F99CEB5008A8BCA /* AppDelegate.swift in Sources */,
 				9A01917C1FA5730D0075B3A8 /* MapViewController.swift in Sources */,
 			);
