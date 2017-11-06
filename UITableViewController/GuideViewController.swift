@@ -47,6 +47,15 @@ class GuideViewController: UIPageViewController, UIPageViewControllerDataSource 
         return vc(atIndex: index)   // 返回左边(上一个)控制器
     }
     
+//    添加默认指示器(无法调整位置、颜色等，在ContentViewController中添加代码，在storyboard中添加一个定制的UIPageControl组件取代)
+//    func presentationCount(for pageViewController: UIPageViewController) -> Int {
+//        return headings.count   // 返回显示页数
+//    }
+//    
+//    func presentationIndex(for pageViewController: UIPageViewController) -> Int {
+//        return 0    // 起始页索引
+//    }
+    
     // MARK: - 自定义函数
     func vc(atIndex: Int) -> ContentViewController? {
         if case 0..<headings.count = atIndex {

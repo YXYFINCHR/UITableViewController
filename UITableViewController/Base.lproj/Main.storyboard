@@ -563,24 +563,42 @@
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <pageControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" numberOfPages="3" translatesAutoresizingMaskIntoConstraints="NO" id="qZg-ae-w36">
+                                <rect key="frame" x="168" y="635" width="39" height="37"/>
+                                <color key="pageIndicatorTintColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                                <color key="currentPageIndicatorTintColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
+                            </pageControl>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="4tW-8c-XSQ">
+                                <rect key="frame" x="156.5" y="556" width="62" height="30"/>
+                                <state key="normal" title="立即体验"/>
+                                <connections>
+                                    <action selector="doneBtnTap:" destination="4ZW-Hx-jBe" eventType="touchUpInside" id="pBA-Sh-LHH"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstItem="Sen-VC-xfd" firstAttribute="centerX" secondItem="6U2-TV-UVq" secondAttribute="centerX" id="6Sm-fe-Ji0"/>
+                            <constraint firstItem="4tW-8c-XSQ" firstAttribute="centerX" secondItem="6U2-TV-UVq" secondAttribute="centerX" id="J3E-bq-sT1"/>
+                            <constraint firstItem="3vG-is-qkJ" firstAttribute="top" secondItem="4tW-8c-XSQ" secondAttribute="bottom" constant="20" id="LMR-zw-GZ2"/>
                             <constraint firstItem="Sen-VC-xfd" firstAttribute="width" secondItem="6U2-TV-UVq" secondAttribute="width" id="PXG-w2-0KD"/>
+                            <constraint firstItem="qZg-ae-w36" firstAttribute="bottom" secondItem="jhY-Cx-QIG" secondAttribute="bottom" constant="5" id="QWf-Dc-xpE"/>
                             <constraint firstItem="jhY-Cx-QIG" firstAttribute="bottom" secondItem="3vG-is-qkJ" secondAttribute="bottom" constant="40" id="SwU-lE-QUA"/>
                             <constraint firstItem="AM7-WJ-8xs" firstAttribute="top" secondItem="jhY-Cx-QIG" secondAttribute="top" id="bi6-6g-q3b"/>
                             <constraint firstItem="Sen-VC-xfd" firstAttribute="height" secondItem="6U2-TV-UVq" secondAttribute="height" multiplier="0.6" id="eD5-bo-fA9"/>
                             <constraint firstItem="3vG-is-qkJ" firstAttribute="centerX" secondItem="6U2-TV-UVq" secondAttribute="centerX" id="qJx-mF-BJQ"/>
                             <constraint firstItem="Sen-VC-xfd" firstAttribute="centerY" secondItem="6U2-TV-UVq" secondAttribute="centerY" id="y11-LY-BaK"/>
+                            <constraint firstItem="qZg-ae-w36" firstAttribute="centerX" secondItem="6U2-TV-UVq" secondAttribute="centerX" id="y4b-sd-zQA"/>
                             <constraint firstItem="AM7-WJ-8xs" firstAttribute="centerX" secondItem="6U2-TV-UVq" secondAttribute="centerX" id="zYd-Gg-Szz"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="jhY-Cx-QIG"/>
                     </view>
                     <connections>
+                        <outlet property="btnDone" destination="4tW-8c-XSQ" id="y8U-zt-FJ8"/>
                         <outlet property="imageView" destination="Sen-VC-xfd" id="BFT-nw-HBx"/>
                         <outlet property="labelFooter" destination="3vG-is-qkJ" id="dOV-fn-AAK"/>
                         <outlet property="labelHeading" destination="AM7-WJ-8xs" id="C3d-Yo-Niu"/>
+                        <outlet property="pageControl" destination="qZg-ae-w36" id="uza-Tf-S4z"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="zTo-9o-6eL" userLabel="First Responder" sceneMemberID="firstResponder"/>

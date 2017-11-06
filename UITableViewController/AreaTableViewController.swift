@@ -62,6 +62,10 @@ class AreaTableViewController: UITableViewController, NSFetchedResultsController
 //        fetchAllData()
 //        tableView.reloadData()
         // 在列表页之前显示引导页
+        let defaults = UserDefaults.standard
+        if defaults.bool(forKey: "guiderShowed") {
+            return  // 如果有guiderShow这个值，则viewDidAppear方法遇到return，执行完毕
+        }
         if let pageVC = storyboard?.instantiateViewController(withIdentifier: "GuideController") as? GuideViewController {
             present(pageVC, animated: true, completion: nil)    // 使用storyboard ID初始化一个翻页控制器，并模态展示出来
         }
